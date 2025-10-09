@@ -1,5 +1,5 @@
 package pe.edu.cibertec.ms.producto.model;
 
-public class producto {
+public class Producto {
 
 }
