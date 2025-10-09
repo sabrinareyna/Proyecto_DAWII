@@ -1,5 +1,6 @@
 USE BD_SHOPMI;
 
+
 /* INSERCIONES */
 
 /* ROL */
