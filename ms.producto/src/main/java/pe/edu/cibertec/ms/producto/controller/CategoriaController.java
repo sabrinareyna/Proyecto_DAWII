@@ -15,7 +15,7 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    @GetMapping("/select")
+    @GetMapping("/SelectCategorias")
     public List<Object[]> selectCategorias(){
         return categoriaService.selectCategorias();
     }
