@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pe.edu.cibertec.ms.pedido.model.Marca;
-import pe.edu.cibertec.ms.pedido.service.MarcaService;
+import pe.edu.cibertec.ms.producto.model.Marca;
+import pe.edu.cibertec.ms.producto.service.MarcaService;
 
 import java.util.List;
 
@@ -16,18 +16,18 @@ public class MarcaController {
     @Autowired
     private MarcaService marcaService;
 
-    @GetMapping
+    @GetMapping("/ListarMarcas")
     public List<Marca> listar() {
         return marcaService.getMarcas();
     }
 
-    @GetMapping("/{id}")
-    public Marca obtenerPorId(@PathVariable int idmarc) {
-        return marcaService.obtenerMarcaPorId(idmarc);
-    }
-
-    @GetMapping("/select")
+    @GetMapping("/SelectMarcas")
     public List<Object[]> select() {
         return marcaService.selectMarcas();
+    }
+
+    @GetMapping("/BuscarMarca/{codMarca}")
+    public Marca obtenerPorId(@PathVariable int codMarca) {
+        return marcaService.obtenerMarcaPorId(codMarca);
     }
 }
