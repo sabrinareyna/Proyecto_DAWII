@@ -1,14 +1,14 @@
 package pe.edu.cibertec.ms.producto.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.cibertec.ms.pedido.model.Marca;
-import pe.edu.cibertec.ms.pedido.repository.MarcaRepository;
+import pe.edu.cibertec.ms.producto.model.Marca;
+import pe.edu.cibertec.ms.producto.repository.MarcaRepository;
 
 import java.util.List;
 
 @Service
 public class MarcaService {
-
     @Autowired
     private MarcaRepository marcaRepository;
 
@@ -39,11 +39,11 @@ public class MarcaService {
     }
 
     //USP_GET_ID_MARCA
-    public Marca obtenerMarcaPorId(int id) {
+    public Marca obtenerMarcaPorId(int codMarca) {
         try {
-            Marca marca = marcaRepository.getMarcaById(id);
+            Marca marca = marcaRepository.getMarcaById(codMarca);
             if (marca == null) {
-                throw new RuntimeException("La marca con ID " + id + " no existe.");
+                throw new RuntimeException("La marca con ID " + codMarca + " no existe.");
             }
             return marca;
         } catch (Exception e) {
