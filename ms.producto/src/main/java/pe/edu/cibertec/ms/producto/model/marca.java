@@ -7,7 +7,6 @@ import lombok.Data;
 @Table(name = "MARCA")
 @Data
 public class marca {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODMARCA", nullable = false)
@@ -18,6 +17,4 @@ public class marca {
 
     @Column(name = "ESTMARCA", nullable = false)
     private boolean estado;
-
-
 }
