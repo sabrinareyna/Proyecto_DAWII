@@ -1,5 +1,4 @@
 package pe.edu.cibertec.ms.producto.model;
 
-public class Categoria {
-
+public class categoria {
 }
