@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pe.edu.cibertec.ms.pedido.model.Marca;
-import pe.edu.cibertec.ms.pedido.service.MarcaService;
+import pe.edu.cibertec.ms.producto.model.Marca;
+import pe.edu.cibertec.ms.producto.service.MarcaService;
 
 import java.util.List;
 

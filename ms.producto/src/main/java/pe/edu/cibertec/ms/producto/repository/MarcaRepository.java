@@ -3,7 +3,7 @@ package pe.edu.cibertec.ms.producto.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import pe.edu.cibertec.ms.pedido.model.Marca;
+import pe.edu.cibertec.ms.producto.model.Marca;
 
 import java.util.List;
 
