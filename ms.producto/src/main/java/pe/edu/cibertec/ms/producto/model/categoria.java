@@ -20,4 +20,4 @@ public class categoria {
 
     @Column(name = "ESTCATEGORIA", nullable = false)
     private String estcat;
-}}
+}
