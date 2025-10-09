@@ -1,4 +1,4 @@
 package pe.edu.cibertec.ms.producto.repository;
 
-public interface ProductoRepository {
+public interface marcaRepository {
 }
