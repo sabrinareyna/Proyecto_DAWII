@@ -10,7 +10,7 @@ public class Marca {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODMARCA", nullable = false)
-    private Long id;
+    private Long idmarc;
 
     @Column(name = "NOMBREMARCA", nullable = false)
     private String nombre;
