@@ -16,18 +16,18 @@ public class MarcaController {
     @Autowired
     private MarcaService marcaService;
 
-    @GetMapping
+    @GetMapping("/ListarMarcas")
     public List<Marca> listar() {
         return marcaService.getMarcas();
     }
 
-    @GetMapping("/{id}")
-    public Marca obtenerPorId(@PathVariable int idmarc) {
-        return marcaService.obtenerMarcaPorId(idmarc);
-    }
-
-    @GetMapping("/select")
+    @GetMapping("/SelectMarcas")
     public List<Object[]> select() {
         return marcaService.selectMarcas();
+    }
+
+    @GetMapping("/BuscarMarca/{codMarca}")
+    public Marca obtenerPorId(@PathVariable int codMarca) {
+        return marcaService.obtenerMarcaPorId(codMarca);
     }
 }
