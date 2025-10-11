@@ -15,8 +15,9 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
+    // USP_SELECT_CATEGORIAS
     @GetMapping("/SelectCategorias")
-    public List<Object[]> selectCategorias(){
+    public List<Object[]> selectCategorias() {
         return categoriaService.selectCategorias();
     }
 }
