@@ -9,10 +9,11 @@ import java.util.List;
 
 @Service
 public class MarcaService {
+
     @Autowired
     private MarcaRepository marcaRepository;
 
-    //USP_GET_MARCA
+    // USP_GET_MARCA
     public List<Marca> getMarcas() {
         try {
             List<Marca> listado = marcaRepository.getMarcas();
@@ -38,7 +39,7 @@ public class MarcaService {
         }
     }
 
-    //USP_GET_ID_MARCA
+    // USP_GET_ID_MARCA
     public Marca obtenerMarcaPorId(int codMarca) {
         try {
             Marca marca = marcaRepository.getMarcaById(codMarca);
