@@ -7,6 +7,8 @@ import pe.edu.cibertec.ms.producto.model.Categoria;
 import java.util.List;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+
+    // USP_SELECT_CATEGORIAS
     @Query(value = "CALL USP_SELECT_CATEGORIAS()", nativeQuery = true)
     List<Object[]> selectCategorias();
 }
