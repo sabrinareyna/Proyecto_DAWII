@@ -7,35 +7,33 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-@Table(name ="PRODUCTO")
+@Table(name = "PRODUCTO")
 public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODPRODUCTO", nullable = false)
-    private Long idpro;
+    private Long codProducto;
 
-    // 🔹 Relación con CATEGORIA
     @ManyToOne
     @JoinColumn(name = "CODCATEGORIA", nullable = false)
-    private Categoria idcat;
+    private Categoria categoria;
 
-    @Column(name = "IMGPRODUCTO", nullable = false, length = 50)
-    private String imgprod;
-
-    @Column(name = "NOMPRODUCTO", nullable = false, length = 70)
-    private String nomprod;
-
-    @Column(name = "DESCRIPCION", nullable = false, length = 300)
-    private String desprod;
-
-    @Column(name = "PREUNI", nullable = false, precision = 10, scale = 2)
-    private BigDecimal preuni;
-
-    // Relación con MARCA
     @ManyToOne
     @JoinColumn(name = "CODMARCA", nullable = false)
-    private Marca id;
+    private Marca marca;
+
+    @Column(name = "IMGPRODUCTO", nullable = false, length = 50)
+    private String imgProducto;
+
+    @Column(name = "NOMPRODUCTO", nullable = false, length = 70)
+    private String nomProducto;
+
+    @Column(name = "DESCRIPCION", nullable = false, length = 300)
+    private String descripcion;
+
+    @Column(name = "PREUNI", nullable = false, precision = 10, scale = 2)
+    private BigDecimal preUni;
 
     @Column(name = "STOCK", nullable = false)
     private int stock;
