@@ -13,21 +13,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/marcas")
 public class MarcaController {
+
     @Autowired
     private MarcaService marcaService;
 
     @GetMapping("/ListarMarcas")
-    public List<Marca> listar() {
+    public List<Marca> listarMarcas() {
         return marcaService.getMarcas();
     }
 
     @GetMapping("/SelectMarcas")
-    public List<Object[]> select() {
+    public List<Object[]> selectMarcas() {
         return marcaService.selectMarcas();
     }
 
     @GetMapping("/BuscarMarca/{codMarca}")
-    public Marca obtenerPorId(@PathVariable int codMarca) {
+    public Marca buscarPorId(@PathVariable int codMarca) {
         return marcaService.obtenerMarcaPorId(codMarca);
     }
 }
