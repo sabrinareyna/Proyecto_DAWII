@@ -14,7 +14,7 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
-    @GetMapping("/categoria/{codCategoria}")
+    @GetMapping("/ListarPorCategoria/{codCategoria}")
     public List<Producto> listarPorCategoria(@PathVariable int codCategoria) {
         return productoService.listarPorCategoria(codCategoria);
     }
