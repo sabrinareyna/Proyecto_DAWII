@@ -8,17 +8,22 @@ import java.util.List;
 
 @Service
 public class CategoriaService {
+
     @Autowired
     private CategoriaRepository categoriaRepository;
 
     // USP_SELECT_CATEGORIAS
     public List<Object[]> selectCategorias() {
-        List<Object[]> categorias = categoriaRepository.selectCategorias();
+        try {
+            List<Object[]> categorias = categoriaRepository.selectCategorias();
 
-        if (categorias == null || categorias.isEmpty()) {
-            throw new RuntimeException("No se encontraron categorías registradas.");
+            if (categorias == null || categorias.isEmpty()) {
+                throw new RuntimeException("No se encontraron categorías registradas.");
+            }
+
+            return categorias;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener las categorías: " + e.getMessage());
         }
-
-        return categorias;
     }
 }
