@@ -21,14 +21,10 @@ public class UsuarioService {
     private RolRepository rolRepository;
 
     public String registrarUsuario(Usuario usuario) {
-        // Buscar el rol CLIENTE automáticamente
         Rol rolCliente = rolRepository.findByNombreRol("CLIENTE")
                 .orElseThrow(() -> new RuntimeException("Rol CLIENTE no existe en la base de datos"));
-
-        // Asignar rol cliente
         usuario.setRol(rolCliente);
 
-        // Registrar usuario mediante procedimiento almacenado
         usuarioRepository.registrarUsuario(
                 0,
                 usuario.getNumeroDocumento(),
