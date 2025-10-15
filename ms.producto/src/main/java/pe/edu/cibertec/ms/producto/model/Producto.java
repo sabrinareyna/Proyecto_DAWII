@@ -13,14 +13,14 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CODPRODUCTO", nullable = false)
-    private Long codProducto;
+    private Integer codProducto;
 
     @ManyToOne
-    @JoinColumn(name = "CODCATEGORIA", nullable = false)
+    @JoinColumn(name = "CODCATEGORIA", referencedColumnName = "CODCATEGORIA", nullable = false)
     private Categoria categoria;
 
     @ManyToOne
-    @JoinColumn(name = "CODMARCA", nullable = false)
+    @JoinColumn(name = "CODMARCA", referencedColumnName = "CODMARCA", nullable = false)
     private Marca marca;
 
     @Column(name = "IMGPRODUCTO", nullable = false, length = 50)
@@ -36,8 +36,9 @@ public class Producto {
     private BigDecimal preUni;
 
     @Column(name = "STOCK", nullable = false)
-    private int stock;
+    private Integer stock;
 
     @Column(name = "ESTPRODUCTO", nullable = false)
-    private boolean estProducto;
+    private Boolean estProducto;
 }
+
