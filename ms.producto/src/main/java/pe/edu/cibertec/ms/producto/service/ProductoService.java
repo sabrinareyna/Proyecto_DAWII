@@ -2,6 +2,8 @@ package pe.edu.cibertec.ms.producto.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.cibertec.ms.producto.dto.ProductoDTO;
 import pe.edu.cibertec.ms.producto.model.Producto;
 import pe.edu.cibertec.ms.producto.repository.ProductoRepository;
 
@@ -13,21 +15,35 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    public List<Producto> listarPorCategoria(int codCategoria) {
-        return productoRepository.listarPorCategoria(codCategoria);
+    @Transactional(readOnly = true)
+    public List<ProductoDTO> getProductos() {
+        return productoRepository.getProductos();
     }
 
-    public List<Producto> listarTop5MasBaratos() {
-        return productoRepository.listarTop5MasBaratos();
+    @Transactional(readOnly = true)
+    public List<ProductoDTO> getTop5ProductosMasBaratos() {
+        return productoRepository.getTop5ProductosMasBaratos();
     }
 
-    public Producto obtenerPorId(int codProducto) {
-        return productoRepository.obtenerPorId(codProducto);
+    @Transactional(readOnly = true)
+    public List<Object[]> getProductosByPedido(Integer codPedido) {
+        return productoRepository.getProductosByPedido(codPedido);
     }
 
-    public String registrarProducto(Producto producto) {
-        productoRepository.registrarOActualizarProducto(
-                0,
+    @Transactional(readOnly = true)
+    public List<ProductoDTO> getProductosPorCategoria(Integer codCategoria) {
+        return productoRepository.getProductosPorCategoria(codCategoria);
+    }
+
+    @Transactional(readOnly = true)
+    public ProductoDTO getProducto(Integer codProducto) {
+        return productoRepository.getProducto(codProducto);
+    }
+
+    @Transactional
+    public String mergeProducto(Producto producto, String accion) {
+        productoRepository.mergeProducto(
+                producto.getCodProducto(),
                 producto.getCategoria().getCodCategoria().intValue(),
                 producto.getImgProducto(),
                 producto.getNomProducto(),
@@ -35,33 +51,19 @@ public class ProductoService {
                 producto.getPreUni().doubleValue(),
                 producto.getMarca().getCodMarca().intValue(),
                 producto.getStock(),
-                producto.isEstProducto()
+                producto.getEstProducto()
         );
-        return "Producto registrado correctamente.";
+        return "Se ha realizado la " + accion + " de producto.";
     }
 
-    public String actualizarProducto(Producto producto) {
-        productoRepository.registrarOActualizarProducto(
-                producto.getCodProducto().intValue(),
-                producto.getCategoria().getCodCategoria().intValue(),
-                producto.getImgProducto(),
-                producto.getNomProducto(),
-                producto.getDescripcion(),
-                producto.getPreUni().doubleValue(),
-                producto.getMarca().getCodMarca().intValue(),
-                producto.getStock(),
-                producto.isEstProducto()
-        );
-        return "Producto actualizado correctamente.";
-    }
-
-    public String cambiarEstadoProducto(int codProducto, boolean estadoActual) {
-        if (estadoActual) {
-            productoRepository.eliminarProducto(codProducto);
-            return "Producto deshabilitado correctamente.";
+    @Transactional
+    public String cambiarEstadoProducto(Integer codProducto, Boolean estActual) {
+        if (Boolean.TRUE.equals(estActual)) {
+            productoRepository.enableProducto(codProducto);
+            return "Se ha activado el producto.";
         } else {
-            productoRepository.habilitarProducto(codProducto);
-            return "Producto habilitado correctamente.";
+            productoRepository.deleteProducto(codProducto);
+            return "Se ha desactivado el producto.";
         }
     }
 }
