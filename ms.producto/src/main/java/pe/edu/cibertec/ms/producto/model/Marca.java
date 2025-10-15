@@ -13,8 +13,8 @@ public class Marca {
     @Column(name = "CODMARCA", nullable = false)
     private Long codMarca;
 
-    @Column(name = "NOMBREMARCA", nullable = false)
-    private String nombreMarca;
+    @Column(name = "NOMBREMARCA", nullable = false, length = 25) // 🔹 aquí el cambio
+    private String nomMarca;
 
     @Column(name = "ESTMARCA", nullable = false)
     private boolean estMarca;
