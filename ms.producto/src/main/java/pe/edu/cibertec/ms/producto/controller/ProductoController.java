@@ -2,6 +2,7 @@ package pe.edu.cibertec.ms.producto.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.cibertec.ms.producto.dto.ProductoDTO;
 import pe.edu.cibertec.ms.producto.model.Producto;
 import pe.edu.cibertec.ms.producto.service.ProductoService;
 
@@ -15,32 +16,32 @@ public class ProductoController {
     private ProductoService productoService;
 
     @GetMapping("/ListarPorCategoria/{codCategoria}")
-    public List<Producto> listarPorCategoria(@PathVariable int codCategoria) {
-        return productoService.listarPorCategoria(codCategoria);
+    public List<ProductoDTO> listarPorCategoria(@PathVariable Integer codCategoria) {
+        return productoService.getProductosPorCategoria(codCategoria);
     }
 
-    @GetMapping("/top5")
-    public List<Producto> listarTop5MasBaratos() {
-        return productoService.listarTop5MasBaratos();
+    @GetMapping("/ListarTop5ProductosMasBaratos")
+    public List<ProductoDTO> listarTop5ProductosMasBaratos() {
+        return productoService.getTop5ProductosMasBaratos();
     }
 
-    @GetMapping("/{codProducto}")
-    public Producto obtenerPorId(@PathVariable int codProducto) {
-        return productoService.obtenerPorId(codProducto);
+    @GetMapping("/ObtenerProducto/{codProducto}")
+    public ProductoDTO obtenerProducto(@PathVariable Integer codProducto) {
+        return productoService.getProducto(codProducto);
     }
 
-    @PostMapping
+    @PostMapping("/RegistrarProducto")
     public String registrarProducto(@RequestBody Producto producto) {
-        return productoService.registrarProducto(producto);
+        return productoService.mergeProducto(producto, "registro");
     }
 
-    @PutMapping
+    @PutMapping("/ActualizarProducto")
     public String actualizarProducto(@RequestBody Producto producto) {
-        return productoService.actualizarProducto(producto);
+        return productoService.mergeProducto(producto, "actualización");
     }
 
-    @PutMapping("/{codProducto}/estado")
-    public String cambiarEstado(@PathVariable int codProducto, @RequestParam boolean estadoActual) {
-        return productoService.cambiarEstadoProducto(codProducto, estadoActual);
+    @PutMapping("/CambiarEstadoProducto/{codProducto}")
+    public String cambiarEstadoProducto(@PathVariable Integer codProducto, @RequestParam Boolean estActual) {
+        return productoService.cambiarEstadoProducto(codProducto, estActual);
     }
 }
