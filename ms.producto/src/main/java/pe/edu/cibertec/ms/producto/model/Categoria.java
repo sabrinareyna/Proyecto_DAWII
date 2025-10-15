@@ -12,12 +12,9 @@ public class Categoria {
     @Column(name = "CODCATEGORIA", nullable = false)
     private Long codCategoria;
 
-    @Column(name = "IMGCATEGORIA", nullable = false)
-    private String imgCategoria;
-
-    @Column(name = "NOMCATEGORIA", nullable = false)
+    @Column(name = "NOMCATEGORIA", nullable = false, length = 100)
     private String nomCategoria;
 
     @Column(name = "ESTCATEGORIA", nullable = false)
-    private String estCategoria;
+    private boolean estCategoria;
 }
