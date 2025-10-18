@@ -9,10 +9,10 @@ public class DetallePedidoRequest {
     private double precioUnitario;
     public DetallePedidoRequest() {}
 
-    public DetallePedidoRequest(int codProducto, int cantidad, double precioUnitario) {
+    public DetallePedidoRequest(int codProducto,double precioUnitario ,int cantidad) {
         this.codProducto = codProducto;
-        this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
+        this.cantidad = cantidad;
     }
 
 }

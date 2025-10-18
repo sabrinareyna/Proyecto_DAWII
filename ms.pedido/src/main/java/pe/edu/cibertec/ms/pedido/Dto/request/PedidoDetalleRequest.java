@@ -10,6 +10,8 @@ public class PedidoDetalleRequest {
     private int codUsuario;
     private LocalDate fecPed;
     private double precioTotal;
+    private int codEstado;
+    private boolean  estPed;
     private List<DetallePedidoRequest> detallePedido;
 
     public PedidoDetalleRequest() {}
