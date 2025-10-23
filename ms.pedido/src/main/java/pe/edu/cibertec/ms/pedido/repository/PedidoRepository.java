@@ -7,9 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import pe.edu.cibertec.ms.pedido.Dto.request.PedidoDetalleRequest;
-import pe.edu.cibertec.ms.pedido.Dto.response.PedidoOneResponse;
-import pe.edu.cibertec.ms.pedido.Dto.response.PedidoResponse;
-import pe.edu.cibertec.ms.pedido.Dto.response.ProductoPedidoResponse;
+import pe.edu.cibertec.ms.pedido.Dto.PedidoOneDto;
+import pe.edu.cibertec.ms.pedido.Dto.PedidoDto;
+import pe.edu.cibertec.ms.pedido.Dto.ProductoPedidoDto;
+import pe.edu.cibertec.ms.pedido.Interfaces.IPedidoRepository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -18,37 +19,37 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public class PedidoRepositoryImpl  implements IPedidoRepository {
+public class PedidoRepository implements IPedidoRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
     private final DataSource dataSource;  //es la conexión a tu base de datos (configurada en `application.properties`).
 
     @Autowired
-    public PedidoRepositoryImpl(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public PedidoRepository(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.dataSource = dataSource;
     }
 
     @Override
-    public List<PedidoResponse> getPedidos() {
+    public List<PedidoDto> getPedidos() {
         try {
             SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
                     .withProcedureName("USP_GET_PEDIDO")
                     .returningResultSet("pedidos",
-                            (rs, rowNum) -> new PedidoResponse(
+                            (rs, rowNum) -> new PedidoDto(
                                     rs.getInt("codPedido"),
                                     rs.getDate("fecPed"),
-                                    rs.getString("cliente"),
+                                    rs.getString("codUsuario"),
                                     rs.getDouble("precioTotal"),
                                     rs.getString("nomEstado"),
-                                    rs.getInt("cantidadTotal"),
-                                    rs.getBoolean("estPed")
+                                    rs.getBoolean("estPed"),
+                                    rs.getInt("cantidadTotal")
                             )
                     );
 
             Map<String, Object> result = jdbcCall.execute();
-            return (List<PedidoResponse>) result.get("pedidos");
+            return (List<PedidoDto>) result.get("pedidos");
 
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener pedidos: " + e.getMessage(), e);
@@ -104,24 +105,24 @@ public class PedidoRepositoryImpl  implements IPedidoRepository {
     }
 
     @Override
-    public PedidoOneResponse getOnePedido(int codPedido) {
+    public PedidoOneDto getOnePedido(int codPedido) {
         try {
             SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
                     .withProcedureName("USP_GET_ONE_PEDIDO")
                     .returningResultSet("pedido",
-                            (rs, rowNum) -> new PedidoOneResponse(
+                            (rs, rowNum) -> new PedidoOneDto(
                                     rs.getInt("CodPedido"),
-                                    rs.getString("Cliente"),
+                                    rs.getString("codUsuario"),
                                     rs.getDate("FecPed").toLocalDate(),
                                     rs.getDouble("PrecioTotal"),
-                                    rs.getString("CodEstado"),
+                                    rs.getString("codEstado"),
                                     rs.getBoolean("EstPed")
                             )
                     );
 
             Map<String, Object> params = Map.of("CODPEDIDO", codPedido);
             Map<String, Object> result = jdbcCall.execute(params);
-            List<PedidoOneResponse> list = (List<PedidoOneResponse>) result.get("pedido");
+            List<PedidoOneDto> list = (List<PedidoOneDto>) result.get("pedido");
 
             return list.isEmpty() ? null : list.get(0);
         } catch (Exception e) {
@@ -130,22 +131,21 @@ public class PedidoRepositoryImpl  implements IPedidoRepository {
     }
 
     @Override
-    public List<ProductoPedidoResponse> getProductosByPedido(int codPedido) {
+    public List<ProductoPedidoDto> getProductosByPedido(int codPedido) {
         try {
             SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
                     .withProcedureName("USP_GET_PRODUCTOS_POR_PEDIDO")
                     .returningResultSet("productos",
-                            (rs, rowNum) -> new ProductoPedidoResponse(
-                                    rs.getString("imgProducto"),
-                                    rs.getString("nomProducto"),
-                                    rs.getBigDecimal("preUni"),
+                            (rs, rowNum) -> new ProductoPedidoDto(
+                                    rs.getInt("codProducto"),
+                                    rs.getDouble("preUni"),
                                     rs.getInt("cantidad")
                             )
                     );
 
             Map<String, Object> params = Map.of("CODPEDIDO", codPedido);
             Map<String, Object> result = jdbcCall.execute(params);
-            return (List<ProductoPedidoResponse>) result.get("productos");
+            return (List<ProductoPedidoDto>) result.get("productos");
 
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener productos del pedido: " + e.getMessage(), e);
@@ -179,7 +179,7 @@ public class PedidoRepositoryImpl  implements IPedidoRepository {
             SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
                     .withProcedureName("USP_DELETE_PEDIDO");
 
-            Map<String, Object> params = Map.of("CODPEDIDO", codPedido);
+            Map<String, Object> params = Map.of("p_codPedido", codPedido);
             jdbcCall.execute(params);
 
             // Para obtener filas afectadas, hacemos un update manual
@@ -187,7 +187,7 @@ public class PedidoRepositoryImpl  implements IPedidoRepository {
             int filasAfectadas = jdbcTemplate.update(sql, codPedido);
 
             if (filasAfectadas == 0) {
-                return ""; // igual que en .NET
+                return "";
             }
 
             return "Se ha eliminado " + filasAfectadas + " pedido" + (filasAfectadas > 1 ? "s" : "");

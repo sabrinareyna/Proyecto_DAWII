@@ -1,11 +1,12 @@
 package pe.edu.cibertec.ms.pedido.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.ms.pedido.Dto.request.PedidoDetalleRequest;
 import pe.edu.cibertec.ms.pedido.Dto.response.PedidoDetalleResponse;
 import pe.edu.cibertec.ms.pedido.Dto.response.PedidoResponse;
-import pe.edu.cibertec.ms.pedido.service.IPedidoService;
+import pe.edu.cibertec.ms.pedido.Interfaces.IPedidoService;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
+    @Autowired
     private final IPedidoService pedidoService;
 
     public PedidoController(IPedidoService pedidoService) {
