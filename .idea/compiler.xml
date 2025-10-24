@@ -13,10 +13,20 @@
         <module name="ms.producto" />
         <module name="ms.pedido" />
       </profile>
+      <profile name="Annotation profile for ms-gateway" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/3.5.6/spring-boot-configuration-processor-3.5.6.jar" />
+        </processorPath>
+        <module name="ms.gateway" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ms.gateway" options="-parameters" />
       <module name="ms.pedido" options="-parameters" />
       <module name="ms.producto" options="-parameters" />
       <module name="ms.usuario" options="-parameters" />
