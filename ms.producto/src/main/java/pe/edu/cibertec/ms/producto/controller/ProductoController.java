@@ -49,10 +49,18 @@ public class ProductoController {
     public String actualizarProducto(@ModelAttribute ProductoRequestDTO productoRequest) {
         String rutaImagenGuardada;
 
+        // 1. Verificar si el usuario SUBIÓ una nueva imagen.
         if (productoRequest.getImgProducto() != null && !productoRequest.getImgProducto().isEmpty()) {
+            // Opción A: Se subió una nueva imagen, se guarda.
             rutaImagenGuardada = guardarImagen(productoRequest.getImgProducto(), productoRequest.getNomProducto());
         } else {
-            rutaImagenGuardada = productoRequest.getImgActual();
+            // Opción B: NO se subió una nueva imagen.
+
+            // 2. Buscar el producto existente en la base de datos para OBTENER la ruta de la imagen actual.
+            Producto productoExistente = productoService.getProductoEntity(productoRequest.getCodProducto());
+
+            // 3. Conservamos la ruta de la imagen que ya estaba en la base de datos.
+            rutaImagenGuardada = productoExistente.getImgProducto();
         }
 
         Producto productoActualizado = mapRequestToProducto(productoRequest, rutaImagenGuardada);

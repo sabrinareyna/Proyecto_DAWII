@@ -19,5 +19,5 @@ public class ProductoRequestDTO {
     private Integer stock;
     private Boolean estProducto;
 
-    private String imgActual;
+
 }
