@@ -26,24 +26,26 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(
-                                        // Rutas de autenticación (Front-end)
-                                        "/inicio/**",
-                                        // Rutas de Swagger/SpringDoc para la documentación
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html"
-                                ).permitAll()
-                                .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http.build();
+        // **Asegúrate de que solo haya UNA llamada a .build()**
+        return http
+                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF (típico para APIs REST sin estado)
+
+                .authorizeHttpRequests(authorize -> authorize
+                        // **AÑADE ESTAS LÍNEAS para permitir el acceso público**
+                        // Asume que la ruta es /inicio/iniciarsesion y /inicio/registrarse
+                        .requestMatchers("/inicio/iniciarsesion", "/inicio/registrarse").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll() // Para Swagger (opcional)
+
+                        // El resto de rutas SÍ requieren autenticación
+                        .anyRequest().authenticated()
+                )
+                // ... (otras configuraciones, como añadir el filtro JWT)
+                // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .build();
     }
 
     @Bean

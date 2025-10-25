@@ -39,7 +39,7 @@ public class Usuario {
     private String correo;
 
     @Column(name = "CONUSUARIO", nullable = false, length = 100)
-    private String contrasena;
+    private String contrasenia;
 
     @Column(name = "FECCRE", nullable = false)
     private LocalDateTime fechaCreacion = LocalDateTime.now();

@@ -36,7 +36,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
         Usuario usuario = usuarioOpt.get();
 
-        boolean passwordMatch = passwordEncoder.matches(request.getContrasena(), usuario.getContrasena());
+        boolean passwordMatch = passwordEncoder.matches(request.getContrasenia(), usuario.getContrasenia());
 
         if (!passwordMatch) {
             return LoginResponse.builder().mensaje("Error: Correo o contraseña incorrecta.").build();
