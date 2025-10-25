@@ -1,10 +1,13 @@
 package pe.edu.cibertec.ms.producto.model;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "CATEGORIA")
+@NoArgsConstructor
 public class Categoria {
 
     @Id
@@ -17,4 +20,8 @@ public class Categoria {
 
     @Column(name = "ESTCATEGORIA", nullable = false)
     private boolean estCategoria;
+
+    public Categoria(Long codCategoria) {
+        this.codCategoria = codCategoria;
+    }
 }

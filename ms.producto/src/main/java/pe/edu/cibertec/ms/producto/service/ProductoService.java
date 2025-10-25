@@ -56,14 +56,26 @@ public class ProductoService {
         return "Se ha realizado la " + accion + " de producto.";
     }
 
+    //_-----------------------
+    @Transactional(readOnly = true)
+    public Producto getProductoEntity(Integer codProducto) {
+        return productoRepository.findById(codProducto)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+    }
+
+
+
     @Transactional
-    public String cambiarEstadoProducto(Integer codProducto, Boolean estActual) {
+    public String cambiarEstadoProducto(Integer codProducto) {
+        Producto producto = getProductoEntity(codProducto);
+        Boolean estActual = producto.getEstProducto();
+
         if (Boolean.TRUE.equals(estActual)) {
-            productoRepository.enableProducto(codProducto);
-            return "Se ha activado el producto.";
-        } else {
             productoRepository.deleteProducto(codProducto);
             return "Se ha desactivado el producto.";
+        } else {
+            productoRepository.enableProducto(codProducto);
+            return "Se ha activado el producto.";
         }
     }
 }

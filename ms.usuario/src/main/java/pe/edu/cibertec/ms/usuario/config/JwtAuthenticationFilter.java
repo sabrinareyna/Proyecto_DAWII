@@ -19,22 +19,22 @@ import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
-    
+
     private final JwtTokenUtil jwtTokenUtil;
-    
+
     public JwtAuthenticationFilter(JwtTokenUtil jwtTokenUtil){
         this.jwtTokenUtil = jwtTokenUtil;
     }
-    
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, 
+                                    HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        
+
         String token = getJwtFromRequest(request);
-        
+
         if (token != null && jwtTokenUtil.validateToken(token)){
-            
+
             String correo = jwtTokenUtil.getCorreoFromToken(token);
             String rol = jwtTokenUtil.getRolFromToken(token);
 
@@ -44,16 +44,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 authorities = List.of(new SimpleGrantedAuthority(rol));
             }
 
-            UsernamePasswordAuthenticationToken authentication = 
+            UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(correo, null, null);
-            
+
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        
+
         filterChain.doFilter(request, response);
     }
-    
+
     private String getJwtFromRequest(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){

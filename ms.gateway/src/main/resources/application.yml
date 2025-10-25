@@ -26,18 +26,39 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/productos/**
+          filters:
+            - RewritePath=/productos/(?<segment>.*), /productos/$\{segment}
+
+        - id: ms-marca
+          uri: http://localhost:8081
+          predicates:
+            - Path=/marcas/**
+          filters:
+            - RewritePath=/marcas/(?<segment>.*), /marcas/$\{segment}
+
+        - id: ms-producto-images
+          uri: http://localhost:8081
+          predicates:
+            - Path=/imagenes/**
+
 
         - id: ms-pedido
           uri: http://localhost:8082
           predicates:
             - Path=/pedidos/**
+          filters:
+            - RewritePath=/pedidos/(?<segment>.*), /pedidos/$\{segment}
 
         - id: ms-usuario-auth
           uri: http://localhost:8083
           predicates:
             - Path=/inicio/**
+          filters:
+            - RewritePath=/inicio/(?<segment>.*), /inicio/$\{segment}
 
         - id: ms-usuario-recursos
           uri: http://localhost:8083
           predicates:
             - Path=/usuarios/**
+          filters:
+            - RewritePath=/usuarios/(?<segment>.*), /usuarios/$\{segment}

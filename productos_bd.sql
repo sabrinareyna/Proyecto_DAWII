@@ -372,7 +372,7 @@ BEGIN
     SELECT
         PR.CODPRODUCTO,
         CA.NOMCATEGORIA,
-        MA.NOMBREMARCA,
+        MA.NOMBREMARCA AS nomMarca,
         PR.IMGPRODUCTO,
         PR.NOMPRODUCTO,
         PR.DESCRIPCION,
@@ -395,7 +395,7 @@ BEGIN
         P.NOMPRODUCTO,
         P.DESCRIPCION,
         P.PREUNI,
-        M.NOMBREMARCA,
+        M.NOMBREMARCA AS nomMarca,
         P.STOCK,
         P.ESTPRODUCTO
     FROM PRODUCTO P
@@ -415,7 +415,7 @@ BEGIN
         P.NOMPRODUCTO,
         P.DESCRIPCION,
         P.PREUNI,
-        M.NOMBREMARCA,
+        M.NOMBREMARCA AS nomMarca,
         P.STOCK,
         P.ESTPRODUCTO
     FROM PRODUCTO P
@@ -437,7 +437,7 @@ BEGIN
         PR.NOMPRODUCTO,
         PR.DESCRIPCION,
         PR.PREUNI,
-        MA.NOMBREMARCA,
+        MA.NOMBREMARCA AS nomMarca,
         PR.STOCK,
         PR.ESTPRODUCTO
     FROM PRODUCTO AS PR
