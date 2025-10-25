@@ -1,3 +1,4 @@
+
 package pe.edu.cibertec.ms.usuario.config;
 
 import org.springframework.context.annotation.Bean;
@@ -31,14 +32,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-                            // Rutas de autenticación (Front-end)
-                            "/inicio/**",
-                            // Rutas de Swagger/SpringDoc para la documentación
-                            "/v3/api-docs/**",
-                            "/swagger-ui/**",
-                            "/swagger-ui.html"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+                                        // Rutas de autenticación (Front-end)
+                                        "/inicio/**",
+                                        // Rutas de Swagger/SpringDoc para la documentación
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
+                                .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -55,6 +56,3 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
-
-
-
