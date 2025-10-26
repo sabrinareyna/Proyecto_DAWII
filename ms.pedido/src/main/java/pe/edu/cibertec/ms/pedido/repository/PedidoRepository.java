@@ -70,7 +70,7 @@ public class PedidoRepository implements IPedidoRepository {
                     .map(d -> {
                         Map<String, Object> map = new HashMap<>();
                         map.put("CODPRODUCTO", d.getCodProducto());
-                        map.put("PREUNI", d.getPrecioUnitario());
+                        map.put("PREUNI", d.getPreUni());
                         map.put("CANTIDAD", d.getCantidad());
                         return map;
                     })

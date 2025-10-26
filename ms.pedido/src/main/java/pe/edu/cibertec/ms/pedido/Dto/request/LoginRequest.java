@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginRequest {
     private String correo;
-    private String contrasena;
+    private String contrasenia;
 }
 

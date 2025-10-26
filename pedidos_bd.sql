@@ -58,6 +58,7 @@ VALUES (2, 51, 19.99, 3);   -- ID 51: Xiaomi Sensor de Temperatura y Humedad
 INSERT INTO DETALLEPEDIDO (CODPEDIDO, CODPRODUCTO, PREUNI, CANTIDAD)
 VALUES (2, 64, 129.99, 1);  -- ID 64: HP Sprocket
 
+select*From PEDIDO;
 -- ---------------------------------------------------
 -- PROCEDIMIENTOS
 -- ---------------------------------------------------

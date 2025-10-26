@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 // ... (otras configuraciones, como añadir el filtro JWT)
-                // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .build();

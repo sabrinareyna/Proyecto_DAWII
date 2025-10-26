@@ -6,12 +6,12 @@ import lombok.Data;
 public class DetallePedidoRequest {
     private int codProducto;
     private int cantidad;
-    private double precioUnitario;
+    private double preUni;
     public DetallePedidoRequest() {}
 
-    public DetallePedidoRequest(int codProducto,double precioUnitario ,int cantidad) {
+    public DetallePedidoRequest(int codProducto,double preUni ,int cantidad) {
         this.codProducto = codProducto;
-        this.precioUnitario = precioUnitario;
+        this.preUni = preUni;
         this.cantidad = cantidad;
     }
 

@@ -48,6 +48,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
         String jwt = jwtTokenUtil.generateToken(correo, rol);
 
         return LoginResponse.builder()
+                .id(usuario.getCodUsuario())
                 .token(jwt)
                 .correo(correo)
                 .rol(rol)
