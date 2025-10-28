@@ -19,7 +19,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
 
-    // Inyección de dependencias
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
@@ -56,10 +55,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 .build();
     }
 
-    // Lógica de Consulta Externa (Para ms.pedido)
     @Override
     public UsuarioExternalResponse obtenerUsuarioPorId(Integer codUsuario) {
-        // Ejecuta el Stored Procedure
         List<Object[]> results = usuarioRepository.getUsuarioInfoById(codUsuario);
 
         if (results.isEmpty() || results.get(0) == null) {

@@ -32,13 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String token = getJwtFromRequest(request);
-
         if (token != null && jwtTokenUtil.validateToken(token)){
 
             String correo = jwtTokenUtil.getCorreoFromToken(token);
             String rol = jwtTokenUtil.getRolFromToken(token);
-
-            //Crear la lista de Autoridades (Permisos)
             List<GrantedAuthority> authorities = Collections.emptyList();
             if (StringUtils.hasText(rol)) {
                 authorities = List.of(new SimpleGrantedAuthority(rol));
@@ -56,13 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        // Si la URI es la de inicio de sesión, el filtro JWT NO debe ejecutarse.
         String path = request.getRequestURI();
-        // Asegúrate de usar la ruta completa que pasa por el Gateway,
-        // que probablemente es /inicio/iniciarsesion o /usuarios/inicio/iniciarsesion
-        // (si el Gateway añade un prefijo).
-
-        // Basado en tu URL de error (8080/inicio/iniciarsesion), prueba esta:
         return path.startsWith("/inicio/iniciarsesion");
     }
 

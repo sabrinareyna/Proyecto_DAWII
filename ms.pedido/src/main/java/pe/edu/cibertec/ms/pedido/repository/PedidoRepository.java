@@ -23,7 +23,7 @@ public class PedidoRepository implements IPedidoRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final DataSource dataSource;  //es la conexión a tu base de datos (configurada en `application.properties`).
+    private final DataSource dataSource;
 
     @Autowired
     public PedidoRepository(JdbcTemplate jdbcTemplate, DataSource dataSource) {
@@ -62,10 +62,8 @@ public class PedidoRepository implements IPedidoRepository {
             SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
                     .withProcedureName("USP_INSERT_PEDIDODETALLE");
 
-            // Convertir la lista de detalle a JSON con los nombres correctos
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // Mapear cada detalle a las claves esperadas por MySQL
             List<Map<String, Object>> detalleMapeado = pedido.getDetallePedido().stream()
                     .map(d -> {
                         Map<String, Object> map = new HashMap<>();
@@ -78,7 +76,6 @@ public class PedidoRepository implements IPedidoRepository {
 
             String detalleJson = objectMapper.writeValueAsString(detalleMapeado);
 
-            // Mapear parámetros para el stored procedure
             Map<String, Object> params = Map.of(
                     "p_CODUSUARIO", pedido.getCodUsuario(),
                     "p_FECPED", pedido.getFecPed(),
@@ -88,10 +85,8 @@ public class PedidoRepository implements IPedidoRepository {
                     "p_DETALLE", detalleJson
             );
 
-            // Ejecutar procedimiento
             jdbcCall.execute(params);
 
-            // Imprimir JSON en consola
             System.out.println(params);
             System.out.println(detalleJson);
 
@@ -175,14 +170,12 @@ public class PedidoRepository implements IPedidoRepository {
     @Override
     public String eliminarPedido(int codPedido) {
         try {
-            // Ejecutamos el procedimiento (si quieres mantener SimpleJdbcCall)
             SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
                     .withProcedureName("USP_DELETE_PEDIDO");
 
             Map<String, Object> params = Map.of("p_codPedido", codPedido);
             jdbcCall.execute(params);
 
-            // Para obtener filas afectadas, hacemos un update manual
             String sql = "UPDATE PEDIDO SET CODESTADO = 5, ESTPED = 0 WHERE CODPEDIDO = ?";
             int filasAfectadas = jdbcTemplate.update(sql, codPedido);
 

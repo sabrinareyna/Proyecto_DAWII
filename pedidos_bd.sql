@@ -59,6 +59,7 @@ INSERT INTO DETALLEPEDIDO (CODPEDIDO, CODPRODUCTO, PREUNI, CANTIDAD)
 VALUES (2, 64, 129.99, 1);  -- ID 64: HP Sprocket
 
 select*From PEDIDO;
+select*From DETALLEPEDIDO;
 -- ---------------------------------------------------
 -- PROCEDIMIENTOS
 -- ---------------------------------------------------
@@ -217,5 +218,4 @@ BEGIN
     WHERE D.CODPEDIDO = CODPEDIDO;
 END$$
 DELIMITER ;
-
 

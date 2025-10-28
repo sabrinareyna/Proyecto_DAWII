@@ -23,7 +23,7 @@ public class Producto {
     @JoinColumn(name = "CODMARCA", referencedColumnName = "CODMARCA", nullable = false)
     private Marca marca;
 
-    @Column(name = "IMGPRODUCTO", nullable = false, length = 50)
+    @Column(name = "IMGPRODUCTO", nullable = false, length = 500)
     private String imgProducto;
 
     @Column(name = "NOMPRODUCTO", nullable = false, length = 70)

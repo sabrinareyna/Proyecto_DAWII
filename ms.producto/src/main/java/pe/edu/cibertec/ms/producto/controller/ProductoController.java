@@ -1,6 +1,7 @@
 package pe.edu.cibertec.ms.producto.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pe.edu.cibertec.ms.producto.dto.ProductoDTO;
@@ -14,7 +15,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/productos")
@@ -39,31 +42,41 @@ public class ProductoController {
     }
 
     @PostMapping("/RegistrarProducto")
-    public String registrarProducto(@ModelAttribute ProductoRequestDTO productoRequest) {
-        String rutaImagen = guardarImagen(productoRequest.getImgProducto(), productoRequest.getNomProducto());
+    public ResponseEntity<?> registrarProducto(@ModelAttribute ProductoRequestDTO productoRequest) {
+        String rutaImagen;
+
+        if (productoRequest.getImgProducto() != null && !productoRequest.getImgProducto().isEmpty()) {
+            rutaImagen = guardarImagen(
+                    productoRequest.getImgProducto(),
+                    productoRequest.getNomProducto(),
+                    null
+            );
+        } else {
+            rutaImagen = "default.jpg";
+        }
+
         Producto nuevoProducto = mapRequestToProducto(productoRequest, rutaImagen);
-        return productoService.mergeProducto(nuevoProducto, "registro");
+        String mensaje = productoService.mergeProducto(nuevoProducto, "registro");
+        Map<String, Object> response = new HashMap<>();
+        response.put("mensaje", mensaje);
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/ActualizarProducto")
     public String actualizarProducto(@ModelAttribute ProductoRequestDTO productoRequest) {
-        String rutaImagenGuardada;
-
-        // 1. Verificar si el usuario SUBIÓ una nueva imagen.
+        String rutaImagenFinal;
         if (productoRequest.getImgProducto() != null && !productoRequest.getImgProducto().isEmpty()) {
-            // Opción A: Se subió una nueva imagen, se guarda.
-            rutaImagenGuardada = guardarImagen(productoRequest.getImgProducto(), productoRequest.getNomProducto());
+            rutaImagenFinal = guardarImagen(
+                    productoRequest.getImgProducto(),
+                    productoRequest.getNomProducto(),
+                    productoRequest.getImgActual()
+            );
         } else {
-            // Opción B: NO se subió una nueva imagen.
-
-            // 2. Buscar el producto existente en la base de datos para OBTENER la ruta de la imagen actual.
-            Producto productoExistente = productoService.getProductoEntity(productoRequest.getCodProducto());
-
-            // 3. Conservamos la ruta de la imagen que ya estaba en la base de datos.
-            rutaImagenGuardada = productoExistente.getImgProducto();
+            rutaImagenFinal = productoRequest.getImgActual();
         }
 
-        Producto productoActualizado = mapRequestToProducto(productoRequest, rutaImagenGuardada);
+        Producto productoActualizado = mapRequestToProducto(productoRequest, rutaImagenFinal);
         return productoService.mergeProducto(productoActualizado, "actualización");
     }
 
@@ -72,26 +85,43 @@ public class ProductoController {
         return productoService.cambiarEstadoProducto(codProducto);
     }
 
-    //--------------------------------------
-    // --- LÓGICA AUXILIAR ---
-    private String guardarImagen(MultipartFile archivo, String nomProducto) {
-        if (archivo == null || archivo.isEmpty()) {
-            return null;
-        }
 
-        String nombreArchivo = nomProducto.replaceAll("[^a-zA-Z0-9.-]", "_") + "_" + System.currentTimeMillis() + ".png";
-        Path rutaAbsoluta = Paths.get("src/main/resources/static/imagenes/productos", nombreArchivo);
+    private static final String RUTA_CARPETA_IMAGENES = "C:/agregados/shopmi/imagenes/productos/";
+
+    private String guardarImagen(MultipartFile imagenNueva, String nombreProducto, String imgActual) {
+
+        String nombreOriginal = imagenNueva.getOriginalFilename();
+        String extension = "";
+
+        String nombreBaseSanitizado = nombreProducto.replaceAll("[^a-zA-Z0-9-]", "_").replaceAll("\\s+", "_");
+
+        if (nombreOriginal != null && nombreOriginal.lastIndexOf(".") > 0) {
+            extension = nombreOriginal.substring(nombreOriginal.lastIndexOf("."));
+        }
+        String nombreFinal = nombreBaseSanitizado + "_" + System.currentTimeMillis() + extension;
+        Path uploadPath = Paths.get(RUTA_CARPETA_IMAGENES).toAbsolutePath();
 
         try {
-            Files.createDirectories(rutaAbsoluta.getParent());
-            Files.write(rutaAbsoluta, archivo.getBytes());
-            return "/imagenes/productos/" + nombreArchivo;
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            if (imgActual != null && !imgActual.isEmpty() && !imgActual.equals("default.jpg")) {
+                Path rutaAntigua = uploadPath.resolve(imgActual);
+                Files.deleteIfExists(rutaAntigua);
+                System.out.println("Imagen antigua eliminada: " + imgActual);
+            }
+
+            Path rutaCompleta = uploadPath.resolve(nombreFinal);
+            Files.write(rutaCompleta, imagenNueva.getBytes());
+            System.out.println("Imagen guardada EXITOSAMENTE en: " + rutaCompleta.toString());
+
+            return nombreFinal;
+
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al guardar la imagen: " + e.getMessage());
+            System.err.println("Error al guardar/eliminar la imagen: " + e.getMessage());
+            return imgActual != null ? imgActual : "default.jpg";
         }
     }
-
     private Producto mapRequestToProducto(ProductoRequestDTO request, String rutaImagen) {
         Producto p = new Producto();
         p.setCodProducto(request.getCodProducto());

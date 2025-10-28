@@ -36,6 +36,13 @@ spring:
           filters:
             - RewritePath=/marcas/(?<segment>.*), /marcas/$\{segment}
 
+        - id: ms-categoria
+          uri: http://localhost:8081
+          predicates:
+            - Path=/categorias/**
+          filters:
+            - RewritePath=/categorias/(?<segment>.*), /categorias/$\{segment}
+
         - id: ms-producto-images
           uri: http://localhost:8081
           predicates:

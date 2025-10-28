@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor        // genera constructor vacío
+@NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
     private String correo;

@@ -60,7 +60,6 @@ public class PedidoService implements IPedidoService {
     @Override
     public PedidoDetalleResponse obtenerPedido(int codPedido) {
         try {
-            // Obtener pedido de la base de datos
             PedidoOneDto pedidoDto = pedidoRepository.getOnePedido(codPedido);
 
             PedidoDetalleResponse response = new PedidoDetalleResponse();
@@ -71,7 +70,6 @@ public class PedidoService implements IPedidoService {
                 return response;
             }
 
-            // Convertir PedidoOneDto a PedidoOneResponse
             PedidoOneResponse pedidoResponse = new PedidoOneResponse();
             pedidoResponse.setCodPedido(pedidoDto.getCodPedido());
             pedidoResponse.setFecPed(pedidoDto.getFecPed());
@@ -79,7 +77,6 @@ public class PedidoService implements IPedidoService {
             pedidoResponse.setCodEstado(pedidoDto.getCodEstado());
             pedidoResponse.setEstPed(pedidoDto.isEstPed());
 
-            // Obtener cliente desde microservicio de usuarios
             try {
                 String token = jwtTokenManager.getToken();
                 UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(Integer.parseInt(pedidoDto.getCodUsuario()));
@@ -88,14 +85,11 @@ public class PedidoService implements IPedidoService {
                 pedidoResponse.setCliente("Usuario no encontrado");
             }
 
-            // Obtener productos del pedido
             List<ProductoPedidoDto> productosDto = pedidoRepository.getProductosByPedido(codPedido);
 
-            // Convertir a ItemProductoResponse usando ProductClient
             List<ItemProductoResponse> productos = new ArrayList<>();
             for (ProductoPedidoDto prod : productosDto) {
                 try {
-                    // Llamar a ProductClient para obtener nombre e imagen
                     ProductoResponse prodResp = productClient.getProductById(prod.getCodProducto());
                     ItemProductoResponse item = new ItemProductoResponse();
                     item.setNomProducto(prodResp.getNomProducto());
@@ -104,7 +98,6 @@ public class PedidoService implements IPedidoService {
                     item.setCantidad(prod.getCantidad());
                     productos.add(item);
                 } catch (Exception e) {
-                    // Si falla la llamada, poner datos por defecto
                     ItemProductoResponse item = new ItemProductoResponse();
                     item.setNomProducto("Producto no encontrado");
                     item.setImgProducto("default.jpg");

@@ -12,11 +12,9 @@ public class SwaggerAutoOpen implements CommandLineRunner {
         System.out.println("🚀 Ejecutando SwaggerAutoOpen...");
         String url = "http://localhost:8082/swagger-ui/index.html";
         try {
-            // Intenta primero con Desktop
             if (java.awt.Desktop.isDesktopSupported()) {
                 java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
             } else {
-                // Si no está soportado, usa el comando del sistema operativo
                 Runtime runtime = Runtime.getRuntime();
                 String os = System.getProperty("os.name").toLowerCase();
 

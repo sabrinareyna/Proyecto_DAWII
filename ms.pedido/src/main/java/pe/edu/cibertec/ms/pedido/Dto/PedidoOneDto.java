@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@NoArgsConstructor        // genera constructor vacío
-@AllArgsConstructor       // genera constructor con todos los campos
+@NoArgsConstructor
+@AllArgsConstructor
 public class PedidoOneDto {
     private int codPedido;
     private String codUsuario;

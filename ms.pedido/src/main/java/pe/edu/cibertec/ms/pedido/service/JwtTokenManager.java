@@ -22,10 +22,8 @@ public class JwtTokenManager {
     @Value("${usuario.master.password}")
     private String password;
 
-    // Token actual
     private String token;
 
-    // Fecha de expiración del token
     private long tokenExpiraEn = 0;
 
     public synchronized String getToken() {
@@ -46,7 +44,6 @@ public class JwtTokenManager {
 
 
     private long decodeJwtExpiration(String jwt) {
-        // Divide token en 3 partes: header.payload.signature
         String payload = jwt.split("\\.")[1];
         String json = new String(java.util.Base64.getUrlDecoder().decode(payload));
         try {

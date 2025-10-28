@@ -19,12 +19,11 @@ public class UsuarioExternalController {
     @GetMapping("/usuarios/{codUsuario}")
     public ResponseEntity<UsuarioExternalResponse> obtenerUsuarioPorId(@PathVariable Integer codUsuario) {
 
-        // Llama al servicio para ejecutar el Stored Procedure
         UsuarioExternalResponse usuario = usuarioService.obtenerUsuarioPorId(codUsuario);
-
         if (usuario == null) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(usuario);
     }
 }
