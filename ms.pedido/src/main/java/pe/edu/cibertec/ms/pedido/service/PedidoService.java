@@ -54,14 +54,11 @@ public class PedidoService implements IPedidoService {
 
     @Override
     public String registrarPedidoDetalle(PedidoDetalleRequest pedido) {
-        // 1️⃣ Primero, registrar el pedido en la BD
         String mensaje = pedidoRepository.insertarPedido(pedido);
 
-        // 2️⃣ Luego, por cada producto del pedido, llamar al microservicio de productos
         if (pedido.getDetallePedido() != null && !pedido.getDetallePedido().isEmpty()) {
             for (var detalle : pedido.getDetallePedido()) {
                 try {
-                    // Llamada al servicio de productos para reducir stock
                     Map<String, Object> response = productClient.updateStock(
                             detalle.getCodProducto(),
                             detalle.getCantidad()
@@ -73,8 +70,6 @@ public class PedidoService implements IPedidoService {
                 }
             }
         }
-
-        // 3️⃣ Retornar el mensaje del repositorio
         return mensaje;
     }
 
