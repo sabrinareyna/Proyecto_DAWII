@@ -104,6 +104,63 @@ END$$
 DELIMITER ;
 
 
+DELIMITER $$
+
+CREATE PROCEDURE SP_InsertarUsuario(
+    IN p_NUMERODOCUMENTO CHAR(8),
+    IN p_APEUSUARIO VARCHAR(50),
+    IN p_NOMUSUARIO VARCHAR(50),
+    IN p_FECNAC DATE,
+    IN p_SEXUSUARIO CHAR(1),
+    IN p_TELUSUARIO CHAR(9),
+    IN p_CORUSUARIO VARCHAR(80),
+    IN p_CONUSUARIO VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    -- Verificar si ya existe un usuario con el mismo número de documento o correo
+SELECT COUNT(*) INTO v_existente
+FROM usuario
+WHERE NUMERODOCUMENTO = p_NUMERODOCUMENTO
+   OR CORUSUARIO = p_CORUSUARIO;
+
+IF v_existente > 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'El usuario ya existe con ese documento o correo.';
+ELSE
+        INSERT INTO usuario (
+            NUMERODOCUMENTO,
+            APEUSUARIO,
+            NOMUSUARIO,
+            FECNAC,
+            SEXUSUARIO,
+            TELUSUARIO,
+            CORUSUARIO,
+            CONUSUARIO,
+            FECCRE,
+            ESTUSUARIO,
+            CODROL
+        )
+        VALUES (
+            p_NUMERODOCUMENTO,
+            p_APEUSUARIO,
+            p_NOMUSUARIO,
+            p_FECNAC,
+            p_SEXUSUARIO,
+            p_TELUSUARIO,
+            p_CORUSUARIO,
+            p_CONUSUARIO,
+            NOW(),
+            1,
+            1
+        );
+END IF;
+END$$
+
+DELIMITER ;
+
+
 
 
 

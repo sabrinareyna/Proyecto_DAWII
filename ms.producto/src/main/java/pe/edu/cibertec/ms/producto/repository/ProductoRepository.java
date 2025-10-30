@@ -51,4 +51,13 @@ public interface ProductoRepository extends CrudRepository<Producto, Integer> {
     @Modifying
     @Query(value = "CALL USP_ENABLE_PRODUCTO(:p_codproducto)", nativeQuery = true)
     void enableProducto(@Param("p_codproducto") Integer codProducto);
+
+
+    @Modifying
+    @Query(value = "CALL SP_ActualizarStock(:p_CODPRODUCTO, :p_CANTIDAD)", nativeQuery = true)
+    void updateStock(
+            @Param("p_CODPRODUCTO") Integer codProducto,
+            @Param("p_CANTIDAD") Integer cantidad
+    );
+
 }

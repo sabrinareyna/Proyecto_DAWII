@@ -78,5 +78,14 @@ public class ProductoService {
             return "Se ha activado el producto.";
         }
     }
+    @Transactional
+    public String actualizarStock(Integer codProducto, Integer cantidad) {
+        try {
+            productoRepository.updateStock(codProducto, cantidad);
+            return "Stock actualizado correctamente.";
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar el stock: " + e.getMessage(), e);
+        }
+    }
 }
 

@@ -54,8 +54,30 @@ public class PedidoService implements IPedidoService {
 
     @Override
     public String registrarPedidoDetalle(PedidoDetalleRequest pedido) {
-        return pedidoRepository.insertarPedido(pedido);
+        // 1️⃣ Primero, registrar el pedido en la BD
+        String mensaje = pedidoRepository.insertarPedido(pedido);
+
+        // 2️⃣ Luego, por cada producto del pedido, llamar al microservicio de productos
+        if (pedido.getDetallePedido() != null && !pedido.getDetallePedido().isEmpty()) {
+            for (var detalle : pedido.getDetallePedido()) {
+                try {
+                    // Llamada al servicio de productos para reducir stock
+                    Map<String, Object> response = productClient.updateStock(
+                            detalle.getCodProducto(),
+                            detalle.getCantidad()
+                    );
+                    System.out.println("Stock actualizado para producto " + detalle.getCodProducto() + ": " + response);
+                } catch (Exception e) {
+                    System.err.println("Error al actualizar stock para producto " + detalle.getCodProducto() + ": " + e.getMessage());
+                     throw new RuntimeException("Error al actualizar stock del producto " + detalle.getCodProducto());
+                }
+            }
+        }
+
+        // 3️⃣ Retornar el mensaje del repositorio
+        return mensaje;
     }
+
 
     @Override
     public PedidoDetalleResponse obtenerPedido(int codPedido) {

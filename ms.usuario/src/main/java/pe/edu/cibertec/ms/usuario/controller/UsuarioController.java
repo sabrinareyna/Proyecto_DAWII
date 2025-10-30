@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pe.edu.cibertec.ms.usuario.dto.LoginRequest;
 import pe.edu.cibertec.ms.usuario.dto.LoginResponse;
+import pe.edu.cibertec.ms.usuario.model.RegistrationRequest;
 import pe.edu.cibertec.ms.usuario.service.IUsuarioService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/inicio")
@@ -33,8 +37,25 @@ public class UsuarioController {
     }
 
     @PostMapping("/registrarse")
-    public ResponseEntity<?> registrarse(/* @RequestBody RegistrationRequest request */) {
-        return ResponseEntity.status(HttpStatus.CREATED).body("Registro pendiente de implementación.");
+    public ResponseEntity<?> registrarse(@RequestBody RegistrationRequest request) {
+        try {
+            usuarioService.registrarUsuario(request);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("mensaje", "Usuario registrado exitosamente.");
+            response.put("status", "success");
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (Exception ex) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("mensaje", "Error al registrar usuario: " + ex.getMessage());
+            error.put("status", "error");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
+
+
 }
 

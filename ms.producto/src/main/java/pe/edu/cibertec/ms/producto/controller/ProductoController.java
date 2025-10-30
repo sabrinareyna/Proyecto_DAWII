@@ -84,6 +84,16 @@ public class ProductoController {
     public String cambiarEstadoProducto(@PathVariable Integer codProducto) {
         return productoService.cambiarEstadoProducto(codProducto);
     }
+    @PutMapping("/ActualizarStock/{codProducto}")
+    public ResponseEntity<Map<String, Object>> actualizarStock(@PathVariable Integer codProducto, @RequestParam Integer cantidad) {
+        String mensaje = productoService.actualizarStock(codProducto, cantidad);
+        Map<String, Object> response = new HashMap<>();
+        response.put("mensaje", mensaje);
+        response.put("codProducto", codProducto);
+        response.put("cantidadRestada", cantidad);
+        return ResponseEntity.ok(response);
+    }
+
 
 
     private static final String RUTA_CARPETA_IMAGENES = "C:/agregados/shopmi/imagenes/productos/";

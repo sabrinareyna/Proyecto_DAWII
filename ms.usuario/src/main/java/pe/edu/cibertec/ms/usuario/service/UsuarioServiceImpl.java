@@ -6,6 +6,7 @@ import pe.edu.cibertec.ms.usuario.config.JwtTokenUtil;
 import pe.edu.cibertec.ms.usuario.dto.LoginRequest;
 import pe.edu.cibertec.ms.usuario.dto.LoginResponse;
 import pe.edu.cibertec.ms.usuario.dto.UsuarioExternalResponse;
+import pe.edu.cibertec.ms.usuario.model.RegistrationRequest;
 import pe.edu.cibertec.ms.usuario.model.Usuario;
 import pe.edu.cibertec.ms.usuario.repository.UsuarioRepository;
 
@@ -77,4 +78,29 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
         return response;
     }
+
+    @Override
+    public String registrarUsuario(RegistrationRequest usuario) {
+        try {
+            // Encriptamos la contraseña antes de insertar
+            String contraseniaEncriptada = passwordEncoder.encode(usuario.getContrasenia());
+
+            usuarioRepository.insertarUsuario(
+                    usuario.getNumeroDocumento(),
+                    usuario.getApellido(),
+                    usuario.getNombre(),
+                    usuario.getFechaNacimiento(),
+                    String.valueOf(usuario.getSexo()),
+                    usuario.getTelefono(),
+                    usuario.getCorreo(),
+                    contraseniaEncriptada
+            );
+
+            return "Usuario registrado correctamente.";
+
+        } catch (Exception e) {
+            return "Error al registrar usuario: " + e.getMessage();
+        }
+    }
+
 }

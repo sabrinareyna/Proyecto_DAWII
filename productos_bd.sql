@@ -498,3 +498,31 @@ END$$
 DELIMITER ;
 
 
+DELIMITER $$
+
+CREATE PROCEDURE SP_ActualizarStock(
+    IN p_CODPRODUCTO INT,
+    IN p_CANTIDAD INT
+)
+BEGIN
+    -- Verificar que el producto exista y tenga suficiente stock
+    DECLARE v_stock_actual INT;
+
+SELECT STOCK INTO v_stock_actual
+FROM producto
+WHERE CODPRODUCTO = p_CODPRODUCTO;
+
+IF v_stock_actual IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'El producto no existe';
+    ELSEIF v_stock_actual < p_CANTIDAD THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Stock insuficiente';
+ELSE
+UPDATE producto
+SET STOCK = STOCK - p_CANTIDAD
+WHERE CODPRODUCTO = p_CODPRODUCTO;
+END IF;
+END$$
+
+DELIMITER ;
